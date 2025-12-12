@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
 import Layout from "../components/Layout"
+import UpdateProduct from "../components/UpdateProduct"
 
 const Home = () => {
   const [products, setProducts] = useState([])
   const [user, setUser] = useState(true)
+  const [selectedProduct, setSelectedProduct] = useState(null)
 
   const fetchingProducts = async () => {
     try {
@@ -38,6 +40,11 @@ const Home = () => {
     }
   }
 
+  const handleUpdateProduct = (p) => {
+    console.log(p, "producto a actualizar")
+    setSelectedProduct(p)
+  }
+
   return (
     <Layout>
       <div className="page-banner">Nuestros Productos</div>
@@ -48,6 +55,14 @@ const Home = () => {
         </p>
       </section>
 
+      {
+        selectedProduct && <UpdateProduct
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+          onUpdate={fetchingProducts}
+        />
+      }
+
       <section className="products-grid">
         {products.map((p, i) => (
           <div key={i} className="product-card">
@@ -56,8 +71,10 @@ const Home = () => {
             <p><strong>Precio:</strong> ${p.price}</p>
             <p><strong>Stock:</strong> {p.stock}</p>
             <p><strong>Categoria:</strong> {p.category}</p>
-            <button>Actualizar</button>
-            {user && <button onClick={() => deleteProduct(p._id)}>Borrar</button>}
+            <div className="cont-btn">
+              <button onClick={() => handleUpdateProduct(p)}>Actualizar</button>
+              {user && <button onClick={() => deleteProduct(p._id)}>Borrar</button>}
+            </div>
           </div>
         ))}
       </section>
