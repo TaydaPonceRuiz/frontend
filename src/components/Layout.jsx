@@ -1,7 +1,9 @@
 // src/layouts/Layout.jsx
 import { Link, useNavigate } from "react-router-dom"
+import { useAuth } from "../context/AuthContext"
 
 const Layout = ({ children }) => {
+  const { user, logout } = useAuth()
   const navigateUser = useNavigate()
 
   const handleLogout = () => {
@@ -16,17 +18,19 @@ const Layout = ({ children }) => {
           <Link to="/">Nuestros productos</Link>
           <Link to="/sobre-nosotros">Sobre nosotros</Link>
           <Link to="/contacto">Contactanos</Link>
-          <>
-            <Link to="/login">Login</Link>
-            <Link to="/registro">Registro</Link>
-          </>
-          :
-          <>
-            <Link to="/agregar-producto">Agregar producto</Link>
-            <button onClick={handleLogout}>Cerrar sesión</button>
-          </>
+          {
+            !user ?
+              <>
+                <Link to="/login">Login</Link>
+                <Link to="/registro">Registro</Link>
+              </>
+              :
+              <>
+                <Link to="/agregar-producto">Agregar producto</Link>
+                <button onClick={handleLogout}>Cerrar sesión</button>
+              </>
+          }
         </nav>
-
       </header>
 
       <main className="layout-main">
